@@ -1045,6 +1045,7 @@
   body.dark-bg.low-power #hint{color:var(--paper);opacity:.72}
   body.accent-bg #hint,body.accent-bg.low-power #hint{color:var(--accent-on);opacity:.6}
 
+  #hint,#ppt-presenter{display:none!important}
   /* ============ 演讲者模式 ============ */
   body.ppt-audience #hint,body.ppt-audience #nav,
   body.ppt-preview #hint,body.ppt-preview #nav{display:none!important}
@@ -1999,11 +2000,11 @@
         <h2 style="font-family:var(--sans);font-weight:200;font-size:min(5.6vw,10vh);line-height:.96;letter-spacing:-.035em;color:var(--text-primary)">Six levers to build brand love.</h2>
       </div>
       <div class="sub-grid-3-2" style="margin-top:6vh;margin-bottom:3.6vh">
-        <div class="sub-card"><span class="nb-corner">01</span><i data-lucide="star"></i><div class="ttl">Reviews &amp; social proof</div><div class="desc">Authentic reviews with real photos. Spotlight top-rated products and trusted sellers.</div></div>
-        <div class="sub-card"><span class="nb-corner">02</span><i data-lucide="eye"></i><div class="ttl">Humanize Jumia</div><div class="desc">Show the people and operations behind every order: “Behind your Jumia order”, “The people behind Jumia”.</div></div>
-        <div class="sub-card"><span class="nb-corner">03</span><i data-lucide="video"></i><div class="ttl">Video testimonials</div><div class="desc">Real customers and sellers, from different cities and backgrounds, on why they choose Jumia.</div></div>
-        <div class="sub-card"><span class="nb-corner">04</span><i data-lucide="languages"></i><div class="ttl">Make Jumia more Moroccan</div><div class="desc">Darija as the central language. Content inspired by Moroccan culture, daily habits and local humour.</div></div>
-        <div class="sub-card"><span class="nb-corner">05</span><i data-lucide="clapperboard"></i><div class="ttl">Entertainment &amp; community</div><div class="desc">Keep shifting social media from a promotional channel to entertainment and community building.</div></div>
+        <div class="sub-card"><span class="nb-corner">01</span><i data-lucide="star"></i><div class="ttl">Reviews &amp; social proof</div><div class="desc">Encourage authentic reviews with real photos. Highlight top-rated products and trusted sellers with dedicated content.</div></div>
+        <div class="sub-card"><span class="nb-corner">02</span><i data-lucide="eye"></i><div class="ttl">Humanize Jumia</div><div class="desc">Move beyond promotional content: show the people, operations and teams behind every order (“Behind your Jumia order”, “The people behind Jumia”).</div></div>
+        <div class="sub-card"><span class="nb-corner">03</span><i data-lucide="video"></i><div class="ttl">Video testimonials</div><div class="desc">A dedicated programme with real customers and sellers, from different cities and socioeconomic backgrounds, on why they shop on Jumia.</div></div>
+        <div class="sub-card"><span class="nb-corner">04</span><i data-lucide="languages"></i><div class="ttl">Make Jumia more Moroccan</div><div class="desc">Darija as the central language. Content inspired by Moroccan culture, traditions and daily habits, with local humour and expressions.</div></div>
+        <div class="sub-card"><span class="nb-corner">05</span><i data-lucide="clapperboard"></i><div class="ttl">Emotional connection</div><div class="desc">Through entertainment and relatable content. Keep shifting social media from a promotional channel to entertainment and community building.</div></div>
         <div class="sub-card accent"><span class="nb-corner">06</span><i data-lucide="hand-heart"></i><div class="ttl">Jumia gives back</div><div class="desc">Become a brand that makes a difference. Detailed on the next slide.</div></div>
       </div>
     </div>
@@ -2194,11 +2195,11 @@ const SPEAKER_NOTES = [
     id: 'six-brand-levers', title: 'Six levers to build brand love', section: 'Fixing brand perception', minutes: 2.0,
     purpose: 'Walk through the six brand-perception levers',
     talk: [
-      'Trust: authentic reviews with real photos; highlight top-rated products and trusted sellers',
-      'Humanize: show the people and operations behind each order',
-      'Video testimonials from customers and sellers across cities and backgrounds',
-      'More Moroccan: Darija first, local culture, habits and humour',
-      'Social media keeps shifting from promotion to entertainment and community'
+      'Trust: encourage authentic reviews with real photos; highlight top-rated products and trusted sellers with dedicated content',
+      'Humanize: move beyond promotional content and show the people, operations and teams behind each order',
+      'Video testimonials: a dedicated programme with real customers and sellers from different cities and socioeconomic backgrounds',
+      'More Moroccan: Darija as the central language; content rooted in Moroccan culture, traditions and daily habits, with local humour and expressions',
+      'Emotional connection through entertainment and relatable content; social media keeps shifting from promotion to entertainment and community'
     ],
     transition: 'The sixth lever gets its own slide: Jumia gives back'
   },
@@ -3130,7 +3131,7 @@ window.__pptPresenter=(()=>{
     const editable=e.target?.matches?.('input,textarea,[contenteditable="true"]');
     if(editable){if(e.key==='Escape')e.target.blur();return true;}
     if(mode==='audience'||mode==='preview'){e.preventDefault();return true;}
-    if(mode==='deck'&&e.key?.toLowerCase()==='p'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();enterPresenter(true);return true;}
+    if(mode==='deck'&&e.key?.toLowerCase()==='f'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{});return true;}
     if(mode!=='presenter')return false;
     const key=e.key?.toLowerCase();
     const dialog=document.getElementById('ppt-dialog');
@@ -3155,8 +3156,8 @@ window.__pptPresenter=(()=>{
   function initMode(){
     document.getElementById('ppt-low-power-btn')?.addEventListener('click',()=>window.__setLowPowerMode(!window.__lowPowerMode));
     document.getElementById('ppt-overview-btn')?.addEventListener('click',toggleOverview);
-    document.getElementById('ppt-presenter-btn')?.addEventListener('click',()=>enterPresenter(true));
-    if(requestedMode==='audience')initAudience();else if(requestedMode==='preview')initPreview();else if(requestedMode==='presenter')enterPresenter(false);
+    document.addEventListener('dblclick',()=>{if(mode!=='deck')return;if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{});});
+    if(requestedMode==='audience')initAudience();else if(requestedMode==='preview')initPreview();;
   }
   setInterval(()=>{
     renderTimer();renderInks();updateAutoAdvance();
